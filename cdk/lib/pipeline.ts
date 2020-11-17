@@ -15,7 +15,7 @@ export class Pipeline extends CDK.Stack {
   constructor(scope: CDK.App, id: string, props: PipelineProps) {
     super(scope, id, props)
 
-    const bucketWebsite = new S3.Bucket(this, 'Files', {
+    const bucketWebsite = new S3.Bucket(this, 'WebsiteDeploymentBucket', {
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html',
       publicReadAccess: true,
