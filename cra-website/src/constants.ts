@@ -1,0 +1,1 @@
+export const API_BASEURL="https://iilpb2vgjd.execute-api.eu-central-1.amazonaws.com/prod/products"
