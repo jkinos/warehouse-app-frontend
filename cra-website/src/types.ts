@@ -10,7 +10,24 @@ export interface Product {
 }
 
 export enum InstockValue {
-    'INSTOCK' = 'INSTOCk',
+    'INSTOCK' = 'INSTOCK',
     'OUTOFSTOCK' = 'OUTOFSTOCK',
     'LESSTHAN10' ='LESSTHAN10'
 }
+
+export interface FetchResult {
+        response: null | {manufacturers: string[], products: Product[]};
+        updateTime: null | string; 
+        error: null | Error; 
+        loading: boolean;
+}
+
+export interface ProductProps {
+    content: FetchResult
+    category: string
+}
+
+export interface SelectOption {
+    value:string,
+    label:string
+    }

@@ -19,6 +19,7 @@ export class Pipeline extends CDK.Stack {
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html',
       publicReadAccess: true,
+      removalPolicy: CDK.RemovalPolicy.DESTROY
     })
 
     const outputSources = new CodePipeline.Artifact()
