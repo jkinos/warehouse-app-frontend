@@ -5,7 +5,6 @@ import {API_BASEURL} from '../constants'
 import ProductPage from './ProductPage/'
 import NavBar from './NavBar'
 import HomePage from './Home/HomePage'
-import ErrorPage from './ErrorPage'
 import GlobalStyle from './GlobalStyle'
 
 function App() {
@@ -20,9 +19,6 @@ function App() {
       <NavBar/>
       <main>
       <Switch>
-      <Route path='/' exact>
-        <HomePage jackets={jackets} shirts={shirts} accessories={accessories}/>
-        </Route>
         <Route path='/jackets'>
         <ProductPage content={jackets} category='jackets'/>
         </Route>
@@ -32,8 +28,8 @@ function App() {
         <Route path='/accessories'>
         <ProductPage content={accessories} category='accessories'/>
         </Route>
-        <Route>
-          <ErrorPage/>
+        <Route path='/'>
+        <HomePage jackets={jackets} shirts={shirts} accessories={accessories}/>
         </Route>
       </Switch>
       </main>

@@ -17,7 +17,7 @@ export class Pipeline extends CDK.Stack {
 
     const bucketWebsite = new S3.Bucket(this, 'WebsiteDeploymentBucket', {
       websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'error.html',
+      websiteErrorDocument: 'index.html',
       publicReadAccess: true,
       removalPolicy: CDK.RemovalPolicy.DESTROY
     })

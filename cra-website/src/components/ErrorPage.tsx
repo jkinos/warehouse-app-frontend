@@ -34,7 +34,7 @@ const ErrorPage = () => {
             <Img src={image404} alt=''/>
             <h1>Oops!</h1>
             <h2>Page not Found</h2>
-            <p>Did you want:
+            <p>Here are some helpful links:
             </p>
             <LinksWrapper>
             <StyledLink to="/">Home</StyledLink>
