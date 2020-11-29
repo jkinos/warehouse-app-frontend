@@ -16,7 +16,6 @@ export class Pipeline extends CDK.Stack {
     super(scope, id, props)
 
     const bucketWebsite = new S3.Bucket(this, 'WebsiteDeploymentBucket', {
-      bucketName: 'Warehouse-App',
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html',
       publicReadAccess: true,
@@ -27,7 +26,7 @@ export class Pipeline extends CDK.Stack {
     const outputWebsite = new CodePipeline.Artifact()
 
     const pipeline = new CodePipeline.Pipeline(this, 'Pipeline', {
-      pipelineName: 'Warehouse-App-Website',
+      pipelineName: 'Website',
       restartExecutionOnUpdate: true,
     })
 
@@ -52,9 +51,9 @@ export class Pipeline extends CDK.Stack {
       actions: [
 
         new CodePipelineAction.CodeBuildAction({
-          actionName: 'Warehouse-App-Website',
+          actionName: 'Website',
           project: new CodeBuild.PipelineProject(this, 'BuildWebsite', {
-            projectName: 'Warehouse-App-Website',
+            projectName: 'Website',
             buildSpec: CodeBuild.BuildSpec.fromSourceFilename('./cdk/buildspec.yml'),
           }),
           input: outputSources,
@@ -69,7 +68,7 @@ export class Pipeline extends CDK.Stack {
       actions: [
 
         new CodePipelineAction.S3DeployAction({
-          actionName: 'Warehouse-App-Website',
+          actionName: 'Website',
           input: outputWebsite,
           bucket: bucketWebsite,
         }),
