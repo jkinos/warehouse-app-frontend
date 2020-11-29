@@ -27,7 +27,7 @@ export class Pipeline extends CDK.Stack {
     const outputWebsite = new CodePipeline.Artifact()
 
     const pipeline = new CodePipeline.Pipeline(this, 'Pipeline', {
-      pipelineName: 'Website',
+      pipelineName: 'Warehouse-App-Website',
       restartExecutionOnUpdate: true,
     })
 
@@ -52,9 +52,9 @@ export class Pipeline extends CDK.Stack {
       actions: [
 
         new CodePipelineAction.CodeBuildAction({
-          actionName: 'Website',
+          actionName: 'Warehouse-App-Website',
           project: new CodeBuild.PipelineProject(this, 'BuildWebsite', {
-            projectName: 'Website',
+            projectName: 'Warehouse-App-Website',
             buildSpec: CodeBuild.BuildSpec.fromSourceFilename('./cdk/buildspec.yml'),
           }),
           input: outputSources,
@@ -69,7 +69,7 @@ export class Pipeline extends CDK.Stack {
       actions: [
 
         new CodePipelineAction.S3DeployAction({
-          actionName: 'Website',
+          actionName: 'Warehouse-App-Website',
           input: outputWebsite,
           bucket: bucketWebsite,
         }),
