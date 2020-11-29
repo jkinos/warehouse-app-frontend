@@ -14,7 +14,7 @@ function App() {
     const accessories = useFetch(`${API_BASEURL}/accessories`)
   
   return (
-    <div>
+    <div className='App'>
       <GlobalStyle/>
       <NavBar/>
       <main>

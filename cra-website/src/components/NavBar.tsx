@@ -7,19 +7,23 @@ const StyledNavBar = styled.div`
 background-color:#AA00FF;
 box-shadow: 0 0 0 1px rgba(18,21,26,.04),0 16px 32px 0 rgba(18,21,26,.12);
 
-.nav .nav-link {
+.nav {
+.nav-link {
   font-size: calc(10px + 2vmin);
   color:#FAFAFA;
   background-color:#AA00FF;
   font-weight: 600;
-
-  .active {
-      background-color:#ECEFF1  ;
-      border-color: #ECEFF1;
-      color:#212121;
-      font-weight: 800;
-    }
 }
+.nav-link.active {
+    background-color:#ECEFF1  ;
+    border-color: #ECEFF1;
+    color:#212121;
+    font-weight: 800;
+    }
+
+}
+  
+
 `
 const NavBar = () =>  {
     return(

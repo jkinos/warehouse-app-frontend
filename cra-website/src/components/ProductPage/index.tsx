@@ -6,7 +6,7 @@ import SpinnerNotification from './SpinnerNotification'
 import {capitalize} from '../../utils'
 import { colorOptions, stockValueOptions} from './selectOptions'
 import { Container, Card, FilterContainer, UpdateTime} from './WrappersAndStuff'
-import {Select, TextInput, Label} from './Inputs'
+import {Select, TextInput, Label} from './FilterInputs'
 import {ClearButton} from './Buttons'
 
 const ProductPage:React.FC<ProductProps> = ({content, category}) => {
@@ -156,9 +156,7 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
               <Card>
                   <ClearButton onClick={clearAllFilters}>Clear all filters</ClearButton>
                   {filters()}
-                  <Table>
                     {table()}
-                </Table>
               </Card>
             </Container>
           }

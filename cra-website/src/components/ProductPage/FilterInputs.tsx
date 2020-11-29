@@ -26,7 +26,7 @@ interface Props {
     value: SelectOption[],
     labelledBy: string,
     onChange: any,
-    disabled: boolean | undefined
+    disabled?: boolean | undefined
 }
 
 export const Select:React.FC<Props> =({options, value, labelledBy, onChange, disabled}) => {

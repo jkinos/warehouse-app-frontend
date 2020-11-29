@@ -13,7 +13,11 @@ const GlobalStyle = createGlobalStyle`
   color: #424242 ;
   background-color:#ECEFF1  ;
   min-height: 100vh;
+
 }
+
+
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
