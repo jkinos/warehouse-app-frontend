@@ -22,11 +22,11 @@ const useFetch = (url: string, options?:any) => {
         }   
     }
     doFetch();
-    //const interval=setInterval(()=>{
-      //doFetch();
-      //console.log('updating data...')
-     //},300000)   
-     //return()=>clearInterval(interval)
+    const interval=setInterval(()=>{
+      doFetch();
+      console.log('updating data...')
+     },300000)   
+     return()=>clearInterval(interval)
   }, [url, options, error]);
   return {response,updateTime,error,loading};
 };
