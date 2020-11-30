@@ -8,12 +8,13 @@ import { colorOptions, stockValueOptions} from './selectOptions'
 import { Container, Card, FilterContainer, UpdateTime} from './WrappersAndStuff'
 import {Select, TextInput, Label} from './FilterInputs'
 import {ClearButton} from './Buttons'
+import Spinner from 'react-bootstrap/Spinner'
 
 const ProductPage:React.FC<ProductProps> = ({content, category}) => {
 
   const [manufacturerOptions,setManufacturerOptions] = useState<SelectOption[]>(
     [{ label: "Loading ...", value: "" }])
-
+  const [optionsLoading, setOptionsLoading] = useState(true)
   const [nameFilter, setNameFilter] = useState('')
   const [idFilter, setIdFilter] = useState('')
   const [manufacturerFilter, setManufacturerFilter] = useState<SelectOption[]>(manufacturerOptions)
@@ -33,6 +34,7 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
       .map(m=> ({value: m, label: m}))
       setManufacturerFilter(options)
       setManufacturerOptions(options)
+      setOptionsLoading(false)
     }
   },[content.response])
 
@@ -74,7 +76,8 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
   
   const filteredProducts = filterResults()
 
-  const tableRows = () => filteredProducts?.map(product => 
+  const tableRows = () => 
+  filteredProducts?.map(product => 
   <ProductRow key={product.id} product={product}/>)
 
   const filters = () => {
@@ -143,13 +146,17 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
               </tr>
               </thead>
               <tbody>
-                {tableRows()}
+                {optionsLoading?
+                <tr>{[1,2,3,4,5,6,7].map((item)=>
+                <td key={item}><Spinner animation="border" variant="dark" /></td>)}
+                </tr>
+                : tableRows()}
             </tbody>
           </Table>
           
         return (
         <>  {errorNotification()}
-            {content.loading && loadingNotification()}
+            {content.loading  && loadingNotification()}
             {content.response &&
             <Container>
               <UpdateTime>{capitalize(category)} updated: {content.updateTime}</UpdateTime>
