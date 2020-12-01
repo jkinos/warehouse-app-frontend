@@ -1,50 +1,70 @@
-import React, { useState } from "react"
-import { Product } from '../../types'
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { useEffect, useState, useRef  } from 'react';
+import {Product} from '../../types'
 import ProductRow from './ProductRow'
 
-interface ScrollerProps {
-    data: Product[] | []
+interface Props {
+    data: Product[] | undefined
 }
-const InfiniteScroller: React.FC<ScrollerProps> = ({data}) => {
+const InfiniteScroll:React.FC<Props> = ({data}) => {
+    const [dataList, setDatalist] = useState<Product[]>([])
+    const itemsOnPage = 20
+    const [rows, setRows] = useState(dataList.slice(0, itemsOnPage))
     const [count, setCount] = useState({
-        prev: 0,
-        next: 100
+        prev: itemsOnPage,
+        next: itemsOnPage + itemsOnPage
     })
-    console.log(count)
-    console.log(data.length)
+    const [page, setPage] = useState(1);
+    const loader: any= useRef(null);
 
-    const [hasMore, setHasMore] = useState(true)
-    const [current, setCurrent] = useState(data.slice(count.prev, count.next))
-console.log('current', current)
-    const getMoreData = () => {
-        if (current.length === data.length) {
-            setHasMore(false)
-            return
+    useEffect(() => {
+        if(data) {
+            setDatalist(data)
+            setRows(dataList.slice(0, itemsOnPage))
+            setCount({
+                prev: itemsOnPage,
+                next: itemsOnPage + itemsOnPage
+            })
         }
-        setTimeout(() => {
-            console.log("i'm i doing anything?")
-            setCurrent(current.concat(data.slice(count.prev +100, count.next + 100)))
-        },2000)
-        setCount((prevState) => ({ prev: prevState.prev + 100, next: prevState.next + 100}))
-    }
-    return (
-        
-        <InfiniteScroll
-        dataLength={current.length}
-        next={getMoreData}
-        hasMore={hasMore}
-        loader={<tr>Loading...</tr>}
-        endMessage={
-            <tr style={{ textAlign: 'center' }}>
-              <td>Yay! You have seen it all</td>
-            </tr>
-          }
-        >
-            {current && current.map((product) => 
-            <ProductRow key={product.id} product={product}/>)}
-    </InfiniteScroll>
-    )
+    },[data, dataList])
 
+    useEffect(() => {
+         var options = {
+            root: document.querySelector('.infiniteScrollRoot'),
+            rootMargin: undefined,
+            threshold: 0.1
+         };
+         const observer = new IntersectionObserver(handleObserver, options);
+         if (loader.current) {
+            observer.observe(loader.current)
+         }
+    }, []);
+
+
+    useEffect(() => {
+        if(data) {
+        const newRows = rows?.concat(dataList.slice(count.prev, count.next));
+        setCount({prev: count.prev + itemsOnPage, next: count.next + itemsOnPage})
+        setRows(newRows)
+        }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page])
+
+    const handleObserver = (entities: any) => {
+        const target = entities[0];
+        if (target.isIntersecting) {   
+            setPage((page) => page + 1)
+        }
+    }
+
+    return (
+            <>
+                {
+                rows.map((product) =>
+                    <ProductRow key={product.id} product={product}/>)
+                }
+            <tr className="loading" ref={loader}></tr>
+        </>
+    )
 }
-export default InfiniteScroller
+
+export default InfiniteScroll;

@@ -1,14 +1,14 @@
 import React, {useState, ChangeEvent, useEffect} from 'react'
 import Table from './Table'
 import {ProductProps, SelectOption} from '../../types'
-import ProductRow from './ProductRow'
 import SpinnerNotification from './SpinnerNotification'
 import {capitalize} from '../../utils'
 import { colorOptions, stockValueOptions} from './selectOptions'
-import { Container, Card, FilterContainer, UpdateTime} from './WrappersAndStuff'
+import { Container, Card, FilterInputsContainer,FilterSection,ButtonContainer, UpdateTime, Heading} from './WrappersAndStuff'
 import {Select, TextInput, Label} from './FilterInputs'
-import {ClearButton} from './Buttons'
+import {ClearButton, FilterButton} from './Buttons'
 import Spinner from 'react-bootstrap/Spinner'
+import InfiniteScroller from './InfiniteScroller'
 
 const ProductPage:React.FC<ProductProps> = ({content, category}) => {
 
@@ -25,11 +25,22 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
   const availability = availabilityFilter.map(a => a.value)
   const colors = colorFilter.map(c => c.value)
 
+  const [filteredProducts, setFilteredProducts] = useState(content.response?.products)
+
   const errorMessage = `Something went wrong, failed to update ${category}, refetching...`
   const loadingMessage = `Loading ${category}...`
 
+  const clearAllFilters = () => {
+    setIdFilter('')
+    setNameFilter('')
+    setManufacturerFilter(manufacturerOptions)
+    setColorFilter(colorOptions)
+    setAvailabilityFilter(stockValueOptions)
+    setFilteredProducts(content.response?.products)
+}
   useEffect(()=>{
     if (content.response) {
+      setFilteredProducts(content.response.products)
       const options = content.response.manufacturers
       .map(m=> ({value: m, label: m}))
       setManufacturerFilter(options)
@@ -55,7 +66,7 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
   }
 
   const filterResults = () => {
-    return content.response?.products
+    setFilteredProducts(content.response?.products
     ?.filter(r => r.id.startsWith(idFilter.toLowerCase()))
     .filter(r => r.name.startsWith(nameFilter.toUpperCase()))
     .filter(r => manufacturers.includes(r.manufacturer))
@@ -63,26 +74,15 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
       colors.includes(c)
       || (colors.includes('other')
       && !c.match(/red|orange|yellow|green|blue|purple|pink|grey|black|white|brown/)))).length !== 0)
-    .filter(r => availability.includes(r.availability))
-  }
-
-  const clearAllFilters = () => {
-    setIdFilter('')
-    setNameFilter('')
-    setManufacturerFilter(manufacturerOptions)
-    setColorFilter(colorOptions)
-    setAvailabilityFilter(stockValueOptions)
+    .filter(r => availability.includes(r.availability)))
   }
   
-  const filteredProducts = filterResults()
-
   const tableRows = () => 
-  filteredProducts?.map(product => 
-  <ProductRow key={product.id} product={product}/>)
+  <InfiniteScroller data={filteredProducts}/>
 
   const filters = () => {
     return (
-      <FilterContainer>
+      <FilterInputsContainer>
         <div>
           <Label id='nFilter'>Find by Name</Label>
           <TextInput 
@@ -129,7 +129,7 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
           disabled={content.loading}
         />
         </div>
-        </FilterContainer>)
+        </FilterInputsContainer>)
   }
   
   const table = () => 
@@ -161,8 +161,22 @@ const ProductPage:React.FC<ProductProps> = ({content, category}) => {
             <Container>
               <UpdateTime>{capitalize(category)} updated: {content.updateTime}</UpdateTime>
               <Card>
-                  <ClearButton onClick={clearAllFilters}>Clear all filters</ClearButton>
+                <FilterSection>
+                <Heading>
+                  {`Showing ${filteredProducts? filteredProducts.length: 0} products in category `}
+                  <span>{category}</span>
+                </Heading>
+                <details open>
+                  <summary>
+                    Filtering options
+                  </summary>
                   {filters()}
+                  <ButtonContainer>
+                    <ClearButton onClick={clearAllFilters}>Clear all filters</ClearButton>
+                    <FilterButton onClick={filterResults}>Apply filters</FilterButton>
+                  </ButtonContainer>
+                  </details> 
+                  </FilterSection>
                     {table()}
               </Card>
             </Container>
