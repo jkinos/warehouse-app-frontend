@@ -7,8 +7,8 @@ import { colorOptions, stockValueOptions} from './selectOptions'
 import { Container, Card, FilterInputsContainer,FilterSection,ButtonContainer, UpdateTime, Heading} from './WrappersAndStuff'
 import {Select, TextInput, Label} from './FilterInputs'
 import {ClearButton, FilterButton} from './Buttons'
-import Spinner from 'react-bootstrap/Spinner'
 import InfiniteScroller from './InfiniteScroller'
+import Spinner from 'react-bootstrap/Spinner'
 
 const ProductPage:React.FC<ProductProps> = ({content, category}) => {
 
